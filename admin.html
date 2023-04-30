@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <title>This page is only for admins</title>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <link href="assets/img/cp-image/cp-Logo-3.png" rel="icon">
+    </head>
+    <body style="background-color: rgba(0,71,86,1); color: whitesmoke;">
+
+        <div id="auth-content" style="display: grid; justify-content: center; text-align: center;">
+            <h1 style="margin-bottom: 0px;">Authorize Yourself</h1>
+            <h4>Hey there, This is an admin view, This page is not meant for public users.</h4>
+            <input style="height: 40px; font-size: 15px; width: auto; border-radius: 5px; border: 1px solid greenyellow; background-color: transparent;  padding-left: 5px;"  type="password" id="secretKey" placeholder="Enter Secret Key">
+
+            <div style="display: grid; grid-template-rows: 100%; grid-template-columns: 50% 50%;">
+                <input style="height: 40px; font-size: 15px; width: auto; border-radius: 5px; border: 1px solid greenyellow; background-color: transparent; margin-right: 3px; margin-top: 10px; padding-left: 5px;" type="text" id="username" placeholder="Username">  
+                <input style="height: 40px; font-size: 15px; width: auto; border-radius: 5px; border: 1px solid greenyellow; background-color: transparent; margin-left: 3px; margin-top: 10px; padding-left: 5px;" type="password" id="password" placeholder="Password">
+            </div>
+            <button style="height: 40px; font-size: 15px; width: auto; border-radius: 5px; border: 1px solid rgba(0,71,86,1); background-color: greenyellow; margin-top: 10px; padding-left: 5px;"  onclick="authenticate()">Authenticate</button>
+            
+        </div>
+
+        <div id="enquiry-tables" style="width: 100%; display: grid; gap: 200px; display: none;" >
+            <div style="display: grid; justify-items: center;">
+                <h1 style="text-decoration: underline;">Contact Us Enquires</h1>
+                <table id="contact-us" style="width: 100%; ">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Message</th>
+                    </tr>
+                </table>
+                <lottie-player id="contact-us-loader" src="assets/js/loader.json"  background="transparent"  speed="2"  style="width: 50px; height: 50px; margin: 20px;"  loop autoplay></lottie-player>
+            </div>
+            <div style="display: grid;  justify-items: center;  ">
+                <h1 style="text-decoration: underline;">Quote Enquires</h1>
+                <table id="quote" style="width: 100%;">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Product</th>
+                    </tr>
+                </table>
+                <lottie-player id="quote-loader" src="assets/js/loader.json"  background="transparent"  speed="2"  style="width: 50px; height: 50px; margin: 20px;"  loop autoplay></lottie-player>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    const validateAuthButton = () => {
+
+    }
+
+    const authenticate = async () => {
+       const [secretKey, userName, password] = [document.getElementById('secretKey').value, document.getElementById('username').value, document.getElementById('password').value];
+        
+       if(Number(secretKey) === new Date().getDate()) {
+
+            const data = await fetch('https://api.jsonbin.io/v3/b/644bac8c9d312622a353cbe8', {
+                headers: { "X-Master-Key": "$2b$10$UEaV7eg5gCdU0ZZPBl/GYuwdNtiBXxrGbbU4zfw4tcHbC3ipdy4KO"}      
+            }).then(res => res.json());
+            
+            if(userName === atob(data.record.username) && password === atob(data.record.password)) {
+                document.getElementById('auth-content').innerHTML = "";
+                document.getElementById('enquiry-tables').style.display = "grid";
+                const dataItem = await fetch('https://api.jsonbin.io/v3/b/644bad348e4aa6225e9297f9', {
+                    headers: { "X-Master-Key": "$2b$10$UEaV7eg5gCdU0ZZPBl/GYuwdNtiBXxrGbbU4zfw4tcHbC3ipdy4KO"}      
+                }).then(res => res.json());
+
+                for (i of dataItem.record.contactDetails) {
+                    document.getElementById('contact-us').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.message}</td></tr>`;
+                }
+                ["contact-us-loader", "quote-loader"].map(ids => document.getElementById(ids).style.display = "none");
+
+                for (i of dataItem.record.quotesDetails) {
+                    document.getElementById('quote').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.product}</td></tr>`;
+                }
+            }
+            else {
+                alert('User-name or password is incorrect');
+            }
+        }
+        else {
+            alert('Secret-key or password is incorrect');
+        }
+        setTimeout(() => location.reload(), 60000);
+    }
+</script>
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid greenyellow;
+  text-align: left;
+  padding: 8px;
+}
+</style>
