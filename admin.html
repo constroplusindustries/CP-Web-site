@@ -16,7 +16,6 @@
                 <input style="height: 40px; font-size: 15px; width: auto; border-radius: 5px; border: 1px solid greenyellow; background-color: transparent; margin-left: 3px; margin-top: 10px; padding-left: 5px;" type="password" id="password" placeholder="Password">
             </div>
             <button style="height: 40px; font-size: 15px; width: auto; border-radius: 5px; border: 1px solid rgba(0,71,86,1); background-color: greenyellow; margin-top: 10px; padding-left: 5px;"  onclick="authenticate()">Authenticate</button>
-            
         </div>
 
         <div id="enquiry-tables" style="width: 100%; display: grid; gap: 200px; display: none;" >
@@ -28,6 +27,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Message</th>
+                        <th>Date</th>
                     </tr>
                 </table>
                 <lottie-player id="contact-us-loader" src="assets/js/loader.json"  background="transparent"  speed="2"  style="width: 50px; height: 50px; margin: 20px;"  loop autoplay></lottie-player>
@@ -40,6 +40,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Product</th>
+                        <th>Date</th>
                     </tr>
                 </table>
                 <lottie-player id="quote-loader" src="assets/js/loader.json"  background="transparent"  speed="2"  style="width: 50px; height: 50px; margin: 20px;"  loop autoplay></lottie-player>
@@ -49,10 +50,6 @@
 </html>
 
 <script>
-    const validateAuthButton = () => {
-
-    }
-
     const authenticate = async () => {
        const [secretKey, userName, password] = [document.getElementById('secretKey').value, document.getElementById('username').value, document.getElementById('password').value];
         
@@ -70,12 +67,12 @@
                 }).then(res => res.json());
 
                 for (i of dataItem.record.contactDetails) {
-                    document.getElementById('contact-us').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.message}</td></tr>`;
+                    document.getElementById('contact-us').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.message}</td><td>${i.date}</td></tr>`;
                 }
                 ["contact-us-loader", "quote-loader"].map(ids => document.getElementById(ids).style.display = "none");
 
                 for (i of dataItem.record.quotesDetails) {
-                    document.getElementById('quote').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.product}</td></tr>`;
+                    document.getElementById('quote').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.product}</td><td>${i.date}</td></tr>`;
                 }
             }
             else {
