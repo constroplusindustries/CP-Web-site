@@ -1,4 +1,4 @@
-const putContactUsDetails = async () => {
+var putContactUsDetails = async () => {
     const [name, email, phone, message] = [document.getElementById('cuName').value, document.getElementById('cuEmail').value, document.getElementById('cuPhone').value, document.getElementById('cuMessage').value];
     
     if(name.length !== 0 && email.length !== 0 && phone.length !== 0 && message.length !== 0) {

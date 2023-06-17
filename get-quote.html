@@ -25,6 +25,7 @@
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <link href="assets/css/main.css" rel="stylesheet">
+  <script src="/assets/js/pageCounter.js"></script>
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 
@@ -254,6 +255,7 @@
 </html>
 
 <script>
+  window.onload = () => updateCountOf('getQuote');
   const putQuoteDetails = async () => {
     const [name, email, phone, product] = [document.getElementById('qName').value, document.getElementById('qEmail').value, document.getElementById('qPhone').value, document.getElementById('qProduct').value];
 
@@ -280,7 +282,7 @@
           method: "PUT",
           headers: { "X-Master-Key": "$2b$10$UEaV7eg5gCdU0ZZPBl/GYuwdNtiBXxrGbbU4zfw4tcHbC3ipdy4KO", "Content-Type": "application/json" },
           body: JSON.stringify(object)  
-      }).then(res => res.json());;
+      }).then(res => res.json());
       
       if(data != null) confirm('You will be contacted Soon with quote!');
 
