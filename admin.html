@@ -46,11 +46,16 @@
                 <lottie-player id="quote-loader" src="assets/js/loader.json"  background="transparent"  speed="2"  style="width: 50px; height: 50px; margin: 20px;"  loop autoplay></lottie-player>
             </div>
         </div>
+
+
+        <div id="pageCount">
+
+        </div>
     </body>
 </html>
 
 <script>
-    const authenticate = async () => {
+    var authenticate = async () => {
        const [secretKey, userName, password] = [document.getElementById('secretKey').value, document.getElementById('username').value, document.getElementById('password').value];
         
        if(Number(secretKey) === new Date().getDate()) {
@@ -74,6 +79,23 @@
                 for (i of dataItem.record.quotesDetails) {
                     document.getElementById('quote').innerHTML += `<tr><td>${i.name}</td> <td>${i.email}</td> <td>${i.phone}</td> <td>${i.product}</td><td>${i.date}</td></tr>`;
                 }
+                let dataItemCount = await fetch('https://api.jsonbin.io/v3/b/648c7bafb89b1e2299b0073f', {
+                    headers: { "X-Master-Key": "$2b$10$UEaV7eg5gCdU0ZZPBl/GYuwdNtiBXxrGbbU4zfw4tcHbC3ipdy4KO"}
+                }).then(res => res.json());
+
+                const htmlOfCountData = Object.keys(dataItemCount.record).map(data => '<tr><td>' + data + '</td><td>' + dataItemCount.record[data] + '</td></tr>');
+
+                document.getElementById('pageCount').innerHTML = `
+                    <h1 style="margin-top: 50px">Pages Count</h1>
+                    <table>
+                        <tr>
+                            <th> Page </th>
+                            <th> Count </th>
+                        </tr>
+                        ${htmlOfCountData.join().replaceAll(',', '')}
+                    </table>
+                `;
+                console.log(htmlOfCountData.join().replace(',', ''));
             }
             else {
                 alert('User-name or password is incorrect');
